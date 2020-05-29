@@ -2,6 +2,12 @@
 import time
 import requests
 import pymongo
+import pickle
+import numpy as np
+import pandas as pd
+from clean_data import clean_data
+from time import time
+from model import MyModel
 
 
 class EventAPIClient:
@@ -18,6 +24,7 @@ class EventAPIClient:
         self.api_key = api_key
         self.db = db
         self.interval = 30
+        self.model = None
 
     def save_to_database(self, row):
         """Save a data row to the database."""
@@ -41,15 +48,33 @@ class EventAPIClient:
                 print("Saving...")
                 for row in data:
                     self.save_to_database(row)
+                    self.predict_fraud(row)
             else:
                 print("No new data received.")
             print(f"Waiting {interval} seconds...")
             time.sleep(interval)
+    
+    def predict_fraud(self, row):
+        cleaned_data = clean_data(pd.DataFrame(row), predict=True)
+        print(cleaned_data)
+        print(X)
+        print("prediction: ", self.model.predict(X))
+        print("time :", time())
+        
+        
+        
+    def load_model(self, model):
+        self.model = model
+        
 
 
 def main():
     """Collect events every 30 seconds."""
+    with open('./model/model.pkl', 'rb') as f:
+        model = pickle.load(f)
+    
     client = EventAPIClient()
+    client.load_model(model)
     client.collect()
 
 

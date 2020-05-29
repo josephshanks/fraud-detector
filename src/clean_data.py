@@ -120,3 +120,8 @@ def get_model_data(filepath):
     data = clean_data(data)
     return train_test_split_data(data)
     
+def clean_api_data(data):
+    
+    data = pd.DataFrame(data)
+    
+    
