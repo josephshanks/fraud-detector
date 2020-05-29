@@ -88,6 +88,8 @@ def clean_data(d, predict=False):
             'acct_type',
             'approx_payout_date'
         ], inplace=True)
+    else:
+        data.drop(columns=['sequence_number'], inplace=True)
     
     return data
 
@@ -110,12 +112,11 @@ def train_test_split_data(data, test_size=0.25):
     return train_test_split(X, y, test_size=test_size, stratify=y, shuffle=True)
 
 def get_model_data(filepath):
+    """
+    Run all functions to load and clean data and return train/test data.
+    """
     
     data = load_data(filepath)
     data = clean_data(data)
     return train_test_split_data(data)
     
-def clean_api_data():
-        
-        # cols = ['body_length', 'channels', 'country', 'currency', 'delivery_method', 'description', 'email_domain', 'event_created', 'event_end', 'event_published', 'event_start', 'fb_published', 'gts', 'has_analytics', 'has_header', 'has_logo', 'listed', 'name', 'name_length', 'num_order', 'num_payouts', 'object_id', 'org_desc', 'org_facebook', 'org_name', 'org_twitter', 'payee_name', 'payout_type', 'previous_payouts', 'sale_duration', 'sale_duration2', 'show_map', 'ticket_types', 'user_age', 'user_created', 'user_type', 'venue_address', 'venue_country', 'venue_latitude', 'venue_longitude', 'venue_name', 'venue_state']
-    pass
