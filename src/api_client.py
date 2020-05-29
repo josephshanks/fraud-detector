@@ -1,7 +1,7 @@
 """Realtime Events API Client for DSI Fraud Detection Case Study"""
 import time
 import requests
-import pymongo
+from pymongo import MongoClient
 import pickle
 import numpy as np
 import pandas as pd
@@ -27,7 +27,19 @@ class EventAPIClient:
 
     def save_to_database(self, row):
         """Save a data row to the database."""
-        print("Received data:\n" + repr(row) + "\n")  # replace this with your code
+        print("Received data:\n" + repr(row) + "\n")
+        prediction, proba, current_time = self.predict_fraud(row)
+        
+        client = MongoClient('localhost', 27017)
+        db = client['fraud_study']
+        collection = db['fraud_data']
+        
+        collection.insert_one({
+            "data": row, 
+            'prediction': prediction, 
+            'probability': proba, 
+            "time": current_time
+        })
 
     def get_data(self):
         """Fetch data from the API."""
@@ -47,7 +59,6 @@ class EventAPIClient:
                 print("Saving...")
                 for row in data:
                     self.save_to_database(row)
-                    self.predict_fraud(row)
             else:
                 print("No new data received.")
             print(f"Waiting {interval} seconds...")
@@ -56,19 +67,19 @@ class EventAPIClient:
     def predict_fraud(self, row):
         cleaned_data = clean_api_data(row)
         prediction = self.model.predict(cleaned_data)[0]
+        proba = self.model.predict_proba(cleaned_data)[0]
         current_time = time.time()
         
-        print("prediction: ", prediction)
-        print("time :", current_time)
+        print("prediction:  ", prediction)
+        print("probability: ", proba)
+        print("time:        ", current_time)
         print()
         
-        
-        
+        return int(prediction), float(proba), current_time
         
     def load_model(self, model):
         self.model = model
         
-
 
 def main():
     """Collect events every 30 seconds."""

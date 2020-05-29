@@ -24,7 +24,7 @@ class MyModel():
         self.model.fit(X,y)
 
     def predict_proba(self, X):
-        return self.model.predict_proba(X)
+        return self.model.predict_proba(X)[:,1]
     
     def predict(self, X):
         return self.model.predict(X)
@@ -33,8 +33,8 @@ class MyModel():
         self._accuracy = self.model.score(X, y)
         self._precision = precision_score(y, self.predict(X))
         self._recall = recall_score(y, self.predict(X))
-        self._auc = roc_auc_score(y, self.predict_proba(X)[:,1])
-        self._fpr, self._tpr, _ = roc_curve(y, self.predict_proba(X)[:,1])
+        self._auc = roc_auc_score(y, self.predict_proba(X))
+        self._fpr, self._tpr, _ = roc_curve(y, self.predict_proba(X))
         
 
 if __name__ == '__main__':
