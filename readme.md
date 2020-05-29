@@ -25,6 +25,21 @@
 ## Premise
 Our team was hired by a new e-commerce site to try to weed out fraudsters. The company unfortunately does not have much data science expertise. The company asked for us to build a sustainable software project that we could hand off to the companies engineers by deploying your model in the cloud. Since others will potentially use/extend our code the company demanded for clear and concise code that they are able to refer back to after the project is complete.
 
+Deliverables
+Scoping document (in Markdown)
+Code on private fork of repo on Github
+proper functions/encapsulation
+well commented
+
+Model description document 
+Flask app with well documented API
+Needs to query live data from our server 
+Needs to accept input records on POST /score endpoint
+
+Web based front-end to enable quick triage of potential fraud
+Triage importance of transactions (low risk, medium risk, high risk)
+Extra: D3 based visualization of data/trend
+
 ### Context
 
 
