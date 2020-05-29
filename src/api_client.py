@@ -5,8 +5,7 @@ import pymongo
 import pickle
 import numpy as np
 import pandas as pd
-from clean_data import clean_data
-from time import time
+from clean_data import clean_api_data
 from model import MyModel
 
 
@@ -55,11 +54,14 @@ class EventAPIClient:
             time.sleep(interval)
     
     def predict_fraud(self, row):
-        cleaned_data = clean_data(pd.DataFrame(row), predict=True)
-        print(cleaned_data)
-        print(X)
-        print("prediction: ", self.model.predict(X))
-        print("time :", time())
+        cleaned_data = clean_api_data(row)
+        prediction = self.model.predict(cleaned_data)[0]
+        current_time = time.time()
+        
+        print("prediction: ", prediction)
+        print("time :", current_time)
+        print()
+        
         
         
         
